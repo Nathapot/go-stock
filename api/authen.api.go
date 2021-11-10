@@ -2,7 +2,9 @@ package api
 
 import (
 	"github.com/Nathapot/go-stock/db"
+	"github.com/Nathapot/go-stock/interceptor"
 	"github.com/Nathapot/go-stock/models"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 
@@ -29,8 +31,8 @@ func login(c *gin.Context) {
 		} else if checkPasswordHash(user.Password, queryUser.Password) == false {
 			c.JSON(200, gin.H{"result": "nok", "error": "invalid password"})
 		} else {
-
-			c.JSON(200, gin.H{"result": "ok", "data": user})
+			token := interceptor.JwtSign(queryUser)
+			c.JSON(200, gin.H{"result": "ok", "token": token})
 		}
 
 	} else {
@@ -43,7 +45,8 @@ func register(c *gin.Context) {
 	if c.ShouldBind(&user) == nil {
 		user.Password, _ = hashPassword(user.Password)
 		user.CreatedAt = time.Now()
-		if err := db.GetDB().Create(&user).Error; err != nil {
+		err := db.GetDB().Create(&user).Error
+		if err != nil {
 			c.JSON(200, gin.H{"result": "nok", "error": err})
 		} else {
 			c.JSON(200, gin.H{"result": "ok", "data": user})
