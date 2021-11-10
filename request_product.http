@@ -13,3 +13,13 @@ Content-Type: application/json
     "id": 1,
     "name": "Vape"
 }
+
+### Create product with multipart **ไม่ใช้ละขี้เกียจไปก้อบมาจากต้นแบบ ไปยิงใน POSTMAN แทน
+# POST http://localhost:8081/api/v2/product HTTP/1.1
+# Content-Type: multipart/form-data
+
+# {
+#     "name": "Vape",
+#     "stock": 1234,
+#     "price": 555
+# }
