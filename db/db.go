@@ -21,5 +21,6 @@ func SetupDB() {
 	}
 
 	database.AutoMigrate(&models.User{})
+	database.AutoMigrate(&models.Product{})
 	db = database
 }
